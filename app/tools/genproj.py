@@ -38,6 +38,7 @@ def ser(v, ind=1):
     return q(v)
 
 objects = {}
+
 def add(i, d): objects[i] = d; return i
 
 def rel(p, base): return os.path.relpath(p, base)
@@ -46,6 +47,7 @@ swift_core = sorted(glob.glob(os.path.join(APP, "Sources/Core/*.swift")))
 swift_models = sorted(glob.glob(os.path.join(APP, "Sources/Models/*.swift")))
 swift_app = sorted(glob.glob(os.path.join(APP, "Sources/App/*.swift")))
 swift_views = sorted(glob.glob(os.path.join(APP, "Sources/Views/*.swift")))
+swift_legacy = sorted(glob.glob(os.path.join(APP, "Sources/Legacy/*.swift")))   # iOS 12 (UIKit)
 c_src = sorted(glob.glob(os.path.join(ROOT, "core/src/*.c")))
 c_hdr = sorted(glob.glob(os.path.join(ROOT, "core/src/*.h"))) + [os.path.join(ROOT, "core/include/voyager_core.h"), os.path.join(ROOT, "core/include/module.modulemap")]
 tests = sorted(glob.glob(os.path.join(APP, "Tests/KitTests/*.swift")) + glob.glob(os.path.join(APP, "Tests/AppTests/*.swift")))
@@ -53,12 +55,14 @@ faces = sorted(glob.glob(os.path.join(APP, "Resources/Faces/*.png")))   # photo 
 fonts = sorted(glob.glob(os.path.join(APP, "Resources/Fonts/*.ttf")))   # 0.6.7: the two HP 15C Simulator fonts (art/fonts), bundled
 mac_assets = os.path.join(APP, "Resources/macOS/Assets.xcassets")   # app icon (art/icon/make_appiconsets.py)
 ios_assets = os.path.join(APP, "Resources/iOS/Assets.xcassets")
-plists = [os.path.join(APP, p) for p in ["Resources/macOS/Info.plist", "Resources/iOS/Info.plist", "Resources/macOS/VoyagerCalc.entitlements"]]
+plists = [os.path.join(APP, p) for p in ["Resources/macOS/Info.plist", "Resources/iOS/Info.plist", "Resources/macOS/VoyagerCalc.entitlements", "Resources/iOS12/Info.plist"]]
+launch_screen = os.path.join(APP, "Resources/iOS12/LaunchScreen.storyboard")
 
 def ftype(p):
     e = os.path.splitext(p)[1]
     return {".swift": "sourcecode.swift", ".c": "sourcecode.c.c", ".h": "sourcecode.c.h", ".plist": "text.plist.xml",
-            ".entitlements": "text.plist.entitlements", ".modulemap": "sourcecode.module-map", ".png": "image.png", ".ttf": "file", ".xcassets": "folder.assetcatalog"}.get(e, "text")
+            ".entitlements": "text.plist.entitlements", ".modulemap": "sourcecode.module-map", ".png": "image.png", ".ttf": "file", ".xcassets": "folder.assetcatalog",
+            ".storyboard": "file.storyboard"}.get(e, "text")
 
 fileref = {}
 def fref(p):
@@ -76,6 +80,7 @@ g_core = group("Core", swift_core)
 g_models = group("Models", swift_models)
 g_app = group("App", swift_app)
 g_views = group("Views", swift_views)
+g_legacy = group("Legacy (iOS 12)", swift_legacy)
 g_c = group("C core (../core)", c_src + c_hdr)
 g_tests = group("Tests", tests)
 g_faces = group("Faces", faces)
@@ -92,8 +97,10 @@ p_mac = product("VoyagerCalc", "wrapper.application", ".app")
 p_ios = add(oid("product", "VoyagerCalc-iOS"), {"isa": "PBXFileReference", "explicitFileType": "wrapper.application", "includeInIndex": "0",
             "path": "VoyagerCalc.app", "sourceTree": "BUILT_PRODUCTS_DIR"})
 p_test = product("VoyagerCalcTests", "wrapper.cfbundle", ".xctest")
-g_products = add(oid("group", "Products"), {"isa": "PBXGroup", "children": [p_mac, p_ios, p_test], "name": "Products", "sourceTree": "<group>"})
-g_main = add(oid("group", "main"), {"isa": "PBXGroup", "children": [g_app, g_views, g_core, g_models, g_c, g_tests, g_res, g_products], "sourceTree": "<group>"})
+p_ios12 = add(oid("product", "VoyagerCalc-iOS12"), {"isa": "PBXFileReference", "explicitFileType": "wrapper.application", "includeInIndex": "0",
+             "path": "VoyagerCalcLegacy.app", "sourceTree": "BUILT_PRODUCTS_DIR"})
+g_products = add(oid("group", "Products"), {"isa": "PBXGroup", "children": [p_mac, p_ios, p_ios12, p_test], "name": "Products", "sourceTree": "<group>"})
+g_main = add(oid("group", "main"), {"isa": "PBXGroup", "children": [g_app, g_views, g_legacy, g_core, g_models, g_c, g_tests, g_res, g_products], "sourceTree": "<group>"})
 
 common = {
     "SWIFT_VERSION": "5.0",
@@ -136,6 +143,14 @@ def target(name, product_ref, ptype, sources, settings, resources=(), release=No
 app_sources = swift_app + swift_views + swift_core + swift_models + c_src
 lib_sources = [f for f in app_sources if not f.endswith("VoyagerCalcApp.swift")]
 
+# iOS 12: UIKit only. No SwiftUI, no Combine, no Swift concurrency, so CalculatorEngine.swift
+# (async/Task/@MainActor) is replaced by Sources/Legacy/LegacyEngine.swift, and the App layer is
+# only FirmwareStore.swift (Foundation) - AppModel and the file documents need iOS 13+.
+legacy_sources = (swift_legacy
+                  + [os.path.join(APP, "Sources/App/FirmwareStore.swift")]
+                  + [f for f in swift_core if not f.endswith("CalculatorEngine.swift")]
+                  + swift_models + c_src)
+
 t_mac = target("VoyagerCalc-macOS", p_mac, "com.apple.product-type.application", app_sources, {
     "PRODUCT_NAME": "VoyagerCalc", "PRODUCT_BUNDLE_IDENTIFIER": BUNDLE_ID, "SDKROOT": "macosx",
     "SUPPORTED_PLATFORMS": "macosx", "MACOSX_DEPLOYMENT_TARGET": "14.0",
@@ -154,6 +169,11 @@ t_ios = target("VoyagerCalc-iOS", p_ios, "com.apple.product-type.application", a
     "INFOPLIST_FILE": "Resources/iOS/Info.plist", "CODE_SIGN_STYLE": "Automatic", "DEVELOPMENT_TEAM": "",
     "LD_RUNPATH_SEARCH_PATHS": "$(inherited) @executable_path/Frameworks",
     "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon"}, faces + fonts + [ios_assets])
+t_ios12 = target("VoyagerCalc-iOS12", p_ios12, "com.apple.product-type.application", legacy_sources, {
+    "PRODUCT_NAME": "VoyagerCalcLegacy", "PRODUCT_BUNDLE_IDENTIFIER": BUNDLE_ID + ".legacy", "SDKROOT": "iphoneos",
+    "SUPPORTED_PLATFORMS": "iphoneos iphonesimulator", "IPHONEOS_DEPLOYMENT_TARGET": "12.0", "TARGETED_DEVICE_FAMILY": "2",
+    "INFOPLIST_FILE": "Resources/iOS12/Info.plist", "CODE_SIGN_STYLE": "Automatic", "DEVELOPMENT_TEAM": "",
+    "LD_RUNPATH_SEARCH_PATHS": "$(inherited) @executable_path/Frameworks"}, [launch_screen])
 t_test = target("VoyagerCalcTests", p_test, "com.apple.product-type.bundle.unit-test", lib_sources + tests, {
     "PRODUCT_NAME": "VoyagerCalcTests", "PRODUCT_BUNDLE_IDENTIFIER": BUNDLE_ID + ".tests", "SDKROOT": "macosx",
     "SUPPORTED_PLATFORMS": "macosx", "MACOSX_DEPLOYMENT_TARGET": "14.0", "GENERATE_INFOPLIST_FILE": "YES",
@@ -172,7 +192,7 @@ plist_list = add(oid("pcfglist"), {"isa": "XCConfigurationList", "buildConfigura
 root = add(oid("project"), {"isa": "PBXProject", "attributes": {"BuildIndependentTargetsInParallel": "1", "LastSwiftUpdateCheck": "1500",
            "LastUpgradeCheck": "1500"}, "buildConfigurationList": plist_list, "compatibilityVersion": "Xcode 14.0",
            "developmentRegion": "en", "hasScannedForEncodings": "0", "knownRegions": ["en", "Base"], "mainGroup": g_main,
-           "productRefGroup": g_products, "projectDirPath": "", "projectRoot": "", "targets": [t_mac, t_ios, t_test]})
+           "productRefGroup": g_products, "projectDirPath": "", "projectRoot": "", "targets": [t_mac, t_ios, t_ios12, t_test]})
 
 os.makedirs(PROJ, exist_ok=True)
 doc = {"archiveVersion": "1", "classes": {}, "objectVersion": "56", "objects": dict(sorted(objects.items())), "rootObject": root}
@@ -213,5 +233,6 @@ def scheme(name, tid, product, test=None, env=None):
 '''
 open(os.path.join(sd, "VoyagerCalc-macOS.xcscheme"), "w").write(scheme("VoyagerCalc-macOS", t_mac, "VoyagerCalc.app", test=t_test))
 open(os.path.join(sd, "VoyagerCalc-iOS.xcscheme"), "w").write(scheme("VoyagerCalc-iOS", t_ios, "VoyagerCalc.app"))
+open(os.path.join(sd, "VoyagerCalc-iOS12.xcscheme"), "w").write(scheme("VoyagerCalc-iOS12", t_ios12, "VoyagerCalcLegacy.app"))
 open(os.path.join(sd, "VoyagerCalcTests.xcscheme"), "w").write(scheme("VoyagerCalcTests", t_test, "VoyagerCalcTests.xctest", test=t_test))
 print("wrote", PROJ, "with", len(objects), "objects")
