@@ -144,10 +144,12 @@ app_sources = swift_app + swift_views + swift_core + swift_models + c_src
 lib_sources = [f for f in app_sources if not f.endswith("VoyagerCalcApp.swift")]
 
 # iOS 12: UIKit only. No SwiftUI, no Combine, no Swift concurrency, so CalculatorEngine.swift
-# (async/Task/@MainActor) is replaced by Sources/Legacy/LegacyEngine.swift, and the App layer is
-# only FirmwareStore.swift (Foundation) - AppModel and the file documents need iOS 13+.
+# (async/Task/@MainActor) is replaced by Sources/Legacy/LegacyEngine.swift, and of the App layer
+# only FirmwareStore.swift (the user's firmware) and DocFontStore.swift (the documentation PDF
+# fonts) are used: AppModel and the file documents need iOS 13+.
 legacy_sources = (swift_legacy
-                  + [os.path.join(APP, "Sources/App/FirmwareStore.swift")]
+                  + [os.path.join(APP, "Sources/App/FirmwareStore.swift"),
+                     os.path.join(APP, "Sources/App/DocFontStore.swift")]
                   + [f for f in swift_core if not f.endswith("CalculatorEngine.swift")]
                   + swift_models + c_src)
 
