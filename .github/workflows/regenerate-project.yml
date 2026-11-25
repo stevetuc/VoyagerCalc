@@ -1,0 +1,31 @@
+name: Regenerate the Xcode project
+
+# app/VoyagerCalc.xcodeproj is generated from the source tree by app/tools/genproj.py. Running it
+# here keeps the project in step with sources pushed from a machine that has no Xcode.
+on:
+  push:
+    paths:
+      - app/tools/genproj.py
+      - .github/workflows/regenerate-project.yml
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate the project
+        run: python3 app/tools/genproj.py
+      - name: Commit it if it changed
+        run: |
+          if git diff --quiet -- app/VoyagerCalc.xcodeproj; then
+            echo "The project is already in step with the sources."
+            exit 0
+          fi
+          git config user.name "VoyagerCalc project generator"
+          git config user.email "port@localhost"
+          git add app/VoyagerCalc.xcodeproj
+          git commit -m "Regenerate the Xcode project with the phases 4-5 sources"
+          git push
