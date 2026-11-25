@@ -32,6 +32,8 @@ final class LegacyEngine {
         case saveState((Result<SavedState, Error>) -> Void)
         /// Run a closure on the engine thread with the machine (for blocking saves etc.).
         case perform((CalculatorMachine) -> Void)
+        /// Read the registers and (when asked) the program; the snapshot comes back on the main queue.
+        case inspect(Bool, (InspectorSnapshot?) -> Void)
         case stop
     }
 
@@ -111,6 +113,9 @@ final class LegacyEngine {
                 let r = Result { try machine.savedState() }
                 onMain { done(r) }
             case .perform(let body): body(machine)
+            case .inspect(let withProgram, let done):
+                let snapshot = machine.calc.inspect(includeProgram: withProgram)
+                onMain { done(snapshot) }
             case .stop: return false
             }
         } catch {
