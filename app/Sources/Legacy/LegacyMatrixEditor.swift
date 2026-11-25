@@ -172,6 +172,7 @@ final class LegacyMatrixEditorViewController: UIViewController, UITextFieldDeleg
             guard let self = self else { return }
             self.variant = variant
             guard let data = data, let stored = Matrix15.read(data, variant: variant, matrix: self.matrix) else {
+                self.image = nil
                 self.setStatus("The calculator's memory could not be read (is it running as an HP-15C?).", error: true)
                 return
             }
