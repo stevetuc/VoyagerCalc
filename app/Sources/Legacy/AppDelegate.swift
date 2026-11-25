@@ -30,6 +30,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        LegacyCalculator.shared.saveState()
+        LegacyCalculator.shared.saveStateNow()
     }
 }
