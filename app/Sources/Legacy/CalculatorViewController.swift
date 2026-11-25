@@ -256,19 +256,29 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
         }
     }
 
+    /// The image is read on the engine thread and comes back on the main queue, so the screen keeps
+    /// running while the calculator is turned off for the copy (the old read waited up to 5 s here).
     private func saveMemory() {
-        guard let data = calculator.memoryImage() else { return }
-        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(calculator.suggestedMemoryFileName())
-        do {
-            try data.write(to: url, options: .atomic)
-        } catch {
-            alert("VoyagerCalc", "Could not write the memory file: \(error.localizedDescription)")
-            return
+        guard calculator.canKeepMemory else { return }
+        calculator.fetchMemory { [weak self] data, _ in
+            guard let self = self else { return }
+            guard let data = data else {
+                self.alert("VoyagerCalc", "The calculator's memory could not be read. Try again.")
+                return
+            }
+            let name = self.calculator.suggestedMemoryFileName()
+            let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(name)
+            do {
+                try data.write(to: url, options: .atomic)
+            } catch {
+                self.alert("VoyagerCalc", "Could not write the memory file: \(error.localizedDescription)")
+                return
+            }
+            let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            share.popoverPresentationController?.sourceView = self.menuButton
+            share.popoverPresentationController?.sourceRect = self.menuButton.bounds
+            self.present(share, animated: true)
         }
-        let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        share.popoverPresentationController?.sourceView = menuButton
-        share.popoverPresentationController?.sourceRect = menuButton.bounds
-        present(share, animated: true)
     }
 
     // MARK: alerts

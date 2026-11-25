@@ -242,20 +242,6 @@ final class LegacyCalculator {
 
     // MARK: memory
 
-    /// The 2 KB memory image, for the share sheet. The calculator is turned off for the copy.
-    func memoryImage() -> Data? {
-        guard let e = engine else { return nil }
-        guard canKeepMemory else {
-            onError?("HP's original firmware keeps its memory in a different layout than the CE firmware, so memory files are not available with it.")
-            return nil
-        }
-        if let data = e.performAndWait(timeout: 5, { m in try? m.memory(turnBackOn: true) }) {
-            if let d = data { return d }
-        }
-        onError?("The calculator did not answer in time; try again.")
-        return nil
-    }
-
     func loadMemory(_ url: URL) {
         do {
             let ok = url.startAccessingSecurityScopedResource()
