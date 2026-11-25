@@ -1,0 +1,29 @@
+name: ios12 background save
+on:
+  push:
+    paths:
+      - .github/workflows/ios12-bgsave.yml
+permissions:
+  contents: write
+concurrency: ios12-bgsave
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ios12-port
+      - name: Apply the patch and check the result
+        run: |
+          sed 's/^~$/ /' app/tools/ios12-bgsave.patch > /tmp/bg.patch
+          git apply --verbose /tmp/bg.patch
+          echo "490668ca9f9e436c135a21b7b5f4e784a9d19074e7772539a5abda0f0e0bc253  app/Sources/Legacy/LegacyCalculator.swift" | sha256sum -c -
+          echo "d59054af34164d27b85794acab2af42725ade07727e33aaa506f04705b3ef112  app/Sources/Legacy/AppDelegate.swift" | sha256sum -c -
+      - name: Commit, push and drop the stored patch
+        run: |
+          git config user.name "VoyagerCalc port"
+          git config user.email "port@localhost"
+          git rm -q app/tools/ios12-bgsave.patch
+          git add -A
+          git commit -q -m "Keep the calculator's memory without stopping the screen"
+          git push origin HEAD:ios12-port
