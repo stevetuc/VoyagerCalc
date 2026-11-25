@@ -158,8 +158,8 @@ mutation happens on the main queue explicitly.
 | 1 | Legacy plumbing: `AppDelegate`, firmware picker (`UIDocumentPicker`), `FirmwareStore` port, `UserDefaults`, key-click sound | Chooses firmware, no UI yet | 1 day |
 | 2 | LCD + photo face + keys + touch handling + `HardwareKeyRouter` | **Working calculator**, photo face | 2–3 days |
 | 3 | Drawn face fallback, ON/OFF, model switch, memory save/load, About | Feature-complete calculator | 2 days |
-| 4 | Inspector (registers, program listing) | Parity with the main use case | 3–4 days |
-| 5 | Matrix editor, program notes, PDF export, 15C program import | Full parity | 4–6 days |
+| 4 | Inspector (registers, program listing) — **done**, `LegacyInspector.swift` | Parity with the main use case | 3–4 days |
+| 5 | Matrix editor, program notes, PDF and text export — **done**, `LegacyMatrixEditor.swift`, `LegacyProgramNotes.swift` (15C program *import* from a listing is not ported: it is a drag-and-drop path on the Mac) | Full parity | 4–6 days |
 
 * **Calculator-only MVP (phases 0–3): ~2,000–2,500 lines of new UIKit, about one week.**
 * **Full parity (0–5): ~3,500–4,500 lines, about three weeks** of focused work.
@@ -194,7 +194,7 @@ writer are reused, so they carry no port risk.
 
 ## 6. What is in this branch
 
-The `VoyagerCalc-iOS12` target is in the project, and phases 0–3 are implemented in
+The `VoyagerCalc-iOS12` target is in the project, and phases 0–5 are implemented in
 `app/Sources/Legacy/` (UIKit, no SwiftUI, no Combine, no Swift concurrency):
 
 | File | What |
@@ -205,14 +205,30 @@ The `VoyagerCalc-iOS12` target is in the project, and phases 0–3 are implement
 | `CalculatorFaceView.swift` | the drawn face (body, bezel, band, gold legends with brackets, keys with their blue legends), touch tracking and the 0.8 s latch |
 | `LCDCanvasView.swift` | the display: seven-segment digits, points, commas and annunciators, drawn with Core Graphics |
 | `LegacyDrawing.swift` | colours, gradients and shrink-to-fit text |
-| `CalculatorViewController.swift` | the screen: menu (action sheet), `UIDocumentPicker` firmware and memory files, share sheet for memory, iPad hardware keyboard |
+| `CalculatorViewController.swift` | the screen: menu (action sheet), `UIDocumentPicker` firmware, memory and program notes files, share sheets, iPad hardware keyboard, and the panels below in form sheets |
+| `LegacyInspector.swift` | Registers & Program: Stack, Memory (registers by name, for 15C matrices too), Storage, Program. A tap offers the calculator's own command (RCL/STO/GTO nnn, a comment, a copy), the register menu from `CalcActions`; polled every 0.5 s |
+| `LegacyMatrixEditor.swift` | the 15C Matrix Editor: A–E, size with the free-memory check, real-only grid, Paste Matrix (TSV with preview), Copy, Open from Memory, Apply (`DIM` + values through `writeMatrix15`) |
+| `LegacyProgramNotes.swift` | the program notes model (`programDoc.<firmware SHA>` in `UserDefaults`, sidecar next to the memory file, `rematch` after a program change) and the Program Info form: title, comments per step, annotations, the analysis labels and the register meanings |
 
 Reused unchanged: `core/src` (C), `Sources/Models`, and every `Sources/Core` file except
-`CalculatorEngine.swift` (which is replaced by `LegacyEngine.swift`), plus `App/FirmwareStore.swift`.
+`CalculatorEngine.swift` (which is replaced by `LegacyEngine.swift`), plus `App/FirmwareStore.swift`
+and `App/DocFontStore.swift` (the fonts of the documentation PDF; Foundation only).
 
-Not ported yet (phases 4–5): the Registers & Program inspector, the 15C matrix editor, program notes
-and the documentation PDF. `LegacyCalculator.canKeepMemory` already gates the memory UI on the
-firmware's capabilities, so HP's original 12C firmware behaves as in the SwiftUI app.
+Documentation: **Program Info…** edits the notes; **Save Program Notes…** writes the `.voyagerdoc`
+document and **Open Program Notes…** reads one back (unmatched comments are reported); **Export
+Program Documentation (PDF)…** renders the same A4 document as the Mac app through
+`ProgramDocumentPDF`, and **Export Listing as Text…** writes the listing. The notes follow the
+firmware (keyed by its SHA-256), are picked up from a sidecar next to an opened memory file, and are
+rematched when the program in the calculator changes.
+
+Differences from the Mac app, forced by UIKit on iOS 12: the inspector polls instead of observing
+(the engine has no `AsyncStream` here), the matrix grid holds at most 1,024 cells as text fields (a
+larger matrix is still read, pasted, copied and applied, just not drawn), and the panels are form
+sheets instead of windows.
+
+`LegacyCalculator.canKeepMemory` gates the memory, matrix and notes UI on the firmware's
+capabilities: HP's original 12C firmware gets the inspector only when it has `.inspect`, and the
+matrix editor only on the 15C.
 
 ### Build it
 
