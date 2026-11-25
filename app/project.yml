@@ -46,6 +46,25 @@ targets:
         INFOPLIST_FILE: Resources/iOS/Info.plist
         TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  VoyagerCalc-iOS12:
+    type: application
+    platform: iOS
+    deploymentTarget: "12.0"
+    sources:
+      - Sources/Legacy
+      - Sources/App/FirmwareStore.swift
+      - { path: Sources/Core, excludes: [CalculatorEngine.swift] }
+      - Sources/Models
+      - { path: ../core/src, name: C core }
+      - { path: Resources/iOS12/LaunchScreen.storyboard, buildPhase: resources }
+    settings:
+      base:
+        PRODUCT_NAME: VoyagerCalcLegacy
+        PRODUCT_BUNDLE_IDENTIFIER: com.josegonzalezdivasson.VoyagerCalc.legacy
+        INFOPLIST_FILE: Resources/iOS12/Info.plist
+        TARGETED_DEVICE_FAMILY: "2"
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
+
   VoyagerCalcTests:
     type: bundle.unit-test
     platform: macOS
