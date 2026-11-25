@@ -29,6 +29,12 @@ final class LegacyCalculator {
     private(set) var images: [Int] = []
     private(set) var firmwareInfo = ""
     private(set) var firmwareChecksum: String?
+    /// SHA-256 of the firmware file: the key the program notes are kept under.
+    private(set) var firmwareID = ""
+    /// The memory file last opened in the calculator (its program notes sit next to it).
+    private(set) var memoryFileName: String?
+    /// Called on the main queue once a memory file has been loaded.
+    var onMemoryLoaded: ((URL) -> Void)?
 
     private var engine: LegacyEngine?
     private var latch = KeyLatch()
@@ -98,6 +104,8 @@ final class LegacyCalculator {
     private func attach(_ machine: CalculatorMachine, firmwareName: String) {
         stopEngine()
         self.firmwareName = firmwareName
+        firmwareID = machine.firmwareID
+        memoryFileName = nil
         firmwareInfo = machine.calc.firmwareInfo
         firmwareChecksum = machine.calc.firmwareChecksum
         capabilities = machine.capabilities
@@ -211,6 +219,7 @@ final class LegacyCalculator {
     func resetCalculator() {
         guard engine != nil else { return }
         stateStore.clear()
+        memoryFileName = nil
         perform(.memoryReset)
         onMessage?("Calculator reset (ON + −). It starts from a cleared memory.")
     }
@@ -255,17 +264,60 @@ final class LegacyCalculator {
             guard let e = engine else { return }
             e.send(.loadMemory(data) { [weak self] error in
                 guard let self = self else { return }
-                if let error = error { self.onError?(Self.message(error)) }
-                else { self.onMessage?("Memory loaded from \(url.lastPathComponent).") }
+                if let error = error {
+                    self.onError?(Self.message(error))
+                } else {
+                    self.memoryFileName = url.lastPathComponent
+                    self.onMessage?("Memory loaded from \(url.lastPathComponent).")
+                    self.onMemoryLoaded?(url)
+                }
             })
         } catch {
             onError?(Self.message(error))
         }
     }
 
-    func memoryFileName() -> String {
+    /// The name a memory file is saved under (not the one that was opened: that is `memoryFileName`).
+    func suggestedMemoryFileName() -> String {
         let base = firmwareName.map { ($0 as NSString).deletingPathExtension } ?? "Calculator memory"
         return base + "." + model.fileExtension
+    }
+
+    // MARK: inspector / matrix editor
+
+    /// Read the registers and, when asked, the program on the engine thread. The snapshot comes
+    /// back on the main queue; nil when there is nothing to read (no firmware, or a model switch).
+    func inspect(includeProgram: Bool = true, _ done: @escaping (InspectorSnapshot?) -> Void) {
+        guard let e = engine else { return done(nil) }
+        e.send(.inspect(includeProgram, done))
+    }
+
+    /// Key a command the inspector offers (RCL, STO, GTO nnn…) exactly as the calculator would get it.
+    func performKeys(_ keys: [Int]) {
+        guard let e = engine, !keys.isEmpty else { return }
+        apply(latch.unlatchAll())
+        e.send(.perform { machine in _ = try? machine.perform(keys: keys) })
+    }
+
+    /// The 2 KB memory image and the running 15C variant, without blocking the main queue.
+    func fetchMemory(_ done: @escaping (Data?, Int) -> Void) {
+        guard let e = engine else { return done(nil, snapshot.variant) }
+        e.send(.perform { machine in
+            let data = try? machine.memory(turnBackOn: true)
+            let variant = machine.variant
+            DispatchQueue.main.async { done(data, variant) }
+        })
+    }
+
+    /// DIM a matrix and write its values into the calculator's memory (the Matrix Editor's Apply).
+    func writeMatrix(_ m: Int, rows: Int, cols: Int, raw: [UInt64], _ done: @escaping (String?) -> Void) {
+        guard let e = engine else { return done("The calculator is not running.") }
+        e.send(.perform { machine in
+            var failure: String?
+            do { try machine.writeMatrix15(m, rows: rows, cols: cols, raw: raw) }
+            catch { failure = Self.message(error) }
+            DispatchQueue.main.async { done(failure) }
+        })
     }
 
     // MARK: key click
