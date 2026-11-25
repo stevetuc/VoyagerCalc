@@ -5,13 +5,13 @@
 // button, the firmware picker (UIDocumentPicker, iOS 11+), memory files through the share sheet, and
 // the iPad hardware keyboard. It replaces the SwiftUI MainViews menu and the Files importer.
 //
-// Not in this first version (see docs/IOS12-PORT.md): the Registers & Program inspector, the 15C
-// matrix editor, program notes and the documentation PDF. The calculator itself is complete.
+// The menu also opens the Registers & Program inspector, the 15C matrix editor and the program
+// notes (Program Info, the documentation PDF and the listing as text). See docs/IOS12-PORT.md.
 
 import UIKit
 
 final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate {
-    private enum PickerPurpose { case firmware, memory }
+    private enum PickerPurpose { case firmware, memory, notes }
 
     private let calculator = LegacyCalculator.shared
     private let face = CalculatorFaceView(frame: .zero)
@@ -53,6 +53,11 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
         calculator.onChange = { [weak self] in self?.refresh() }
         calculator.onMessage = { [weak self] text in self?.alert("VoyagerCalc", text) }
         calculator.onError = { [weak self] text in self?.alert("VoyagerCalc", text) }
+        calculator.onMemoryLoaded = { [weak self] _ in
+            LegacyProgramNotes.shared.memoryLoaded()
+            self?.refresh()
+        }
+        LegacyProgramNotes.shared.onError = { [weak self] text in self?.alert("VoyagerCalc", text) }
 
         calculator.launch()
         refresh()
@@ -106,6 +111,7 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
     // MARK: display
 
     private func refresh() {
+        LegacyProgramNotes.shared.syncFirmware()
         let model = calculator.model
         if face.model.id != model.id { face.model = model }
         face.pressed = calculator.pressedKeys
@@ -153,6 +159,7 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
                     sheet.addAction(UIAlertAction(title: "Run as the " + CalculatorMachine.variantName(variant),
                                                   style: .default) { [weak self] _ in
                         self?.calculator.switchModel(to: variant)
+                        LegacyProgramNotes.shared.clearAll()
                     })
                 }
             }
@@ -164,11 +171,41 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
                     self?.presentPicker(.memory)
                 })
             }
+            if calculator.capabilities.contains(.inspect) {
+                sheet.addAction(UIAlertAction(title: "Registers & Program", style: .default) { [weak self] _ in
+                    self?.showInspector()
+                })
+                if calculator.model.id == 15 && calculator.canKeepMemory {
+                    sheet.addAction(UIAlertAction(title: "Matrix Editor…", style: .default) { [weak self] _ in
+                        self?.showMatrixEditor()
+                    })
+                }
+                sheet.addAction(UIAlertAction(title: "Program Info…", style: .default) { [weak self] _ in
+                    self?.showProgramInfo()
+                })
+                sheet.addAction(UIAlertAction(title: "Open Program Notes…", style: .default) { [weak self] _ in
+                    self?.presentPicker(.notes)
+                })
+                sheet.addAction(UIAlertAction(title: "Save Program Notes…", style: .default) { [weak self] _ in
+                    self?.saveNotes()
+                })
+                sheet.addAction(UIAlertAction(title: "Export Program Documentation (PDF)…", style: .default) { [weak self] _ in
+                    self?.exportDocumentation(pdf: true)
+                })
+                sheet.addAction(UIAlertAction(title: "Export Listing as Text…", style: .default) { [weak self] _ in
+                    self?.exportDocumentation(pdf: false)
+                })
+            } else {
+                sheet.addAction(UIAlertAction(title: "Registers & Program (needs the CE firmware)", style: .default) { [weak self] _ in
+                    self?.alert("Registers & Program", LegacyCalculator.stockLimits)
+                })
+            }
             sheet.addAction(UIAlertAction(title: "Release Latched Keys", style: .default) { [weak self] _ in
                 self?.calculator.releaseLatchedKeys()
             })
             sheet.addAction(UIAlertAction(title: "Reset Calculator", style: .destructive) { [weak self] _ in
                 self?.calculator.resetCalculator()
+                LegacyProgramNotes.shared.clearAll()
             })
         }
         sheet.addAction(UIAlertAction(title: "About", style: .default) { [weak self] _ in self?.showAbout() })
@@ -186,8 +223,9 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
         Keys: tap a key; tap its gold legend above for f + key, its blue legend on the front for g + key.
         Hold a key for a moment to latch it down (a chord), then press Release Latched Keys.
 
-        This is the iOS 12 build: the calculator, memory files and the model switch work. The Registers & \
-        Program inspector, the matrix editor and the program documentation are not part of it.
+        This is the iOS 12 build: the calculator, memory files, the model switch, Registers & Program, \
+        the 15C Matrix Editor and the program documentation (notes, PDF and text) are all here. The \
+        iPad writes the same documents as the Mac app.
 
         Not affiliated with HP Inc. MIT licence.
         """
@@ -200,7 +238,8 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
 
     private func presentPicker(_ purpose: PickerPurpose) {
         pickerPurpose = purpose
-        let picker = UIDocumentPickerViewController(documentTypes: ["public.data"], in: .import)
+        let types = purpose == .notes ? ["public.json", "public.data"] : ["public.data"]
+        let picker = UIDocumentPickerViewController(documentTypes: types, in: .import)
         picker.delegate = self
         picker.allowsMultipleSelection = false
         present(picker, animated: true)
@@ -210,13 +249,16 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
         guard let url = urls.first else { return }
         switch pickerPurpose {
         case .firmware: calculator.firmwarePicked(url)
-        case .memory: calculator.loadMemory(url)
+        case .memory:
+            LegacyProgramNotes.shared.findSidecar(for: url)
+            calculator.loadMemory(url)
+        case .notes: notesPicked(url)
         }
     }
 
     private func saveMemory() {
         guard let data = calculator.memoryImage() else { return }
-        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(calculator.memoryFileName())
+        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(calculator.suggestedMemoryFileName())
         do {
             try data.write(to: url, options: .atomic)
         } catch {
@@ -285,5 +327,85 @@ final class CalculatorViewController: UIViewController, UIDocumentPickerDelegate
     private func tap(_ code: Int) {
         calculator.press(code)
         calculator.release(code)
+    }
+
+    // MARK: Registers & Program, the matrix editor, the program notes (phases 4–5)
+
+    private func presentSheet(_ controller: UIViewController, width: CGFloat = 640, height: CGFloat = 700) {
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .formSheet
+        nav.preferredContentSize = CGSize(width: width, height: height)
+        nav.navigationBar.barStyle = .black
+        nav.navigationBar.barTintColor = LegacyPanelColors.header
+        nav.navigationBar.tintColor = LegacyPanelColors.gold
+        nav.navigationBar.titleTextAttributes = [.foregroundColor: LegacyPanelColors.ink]
+        present(nav, animated: true)
+    }
+
+    private func showInspector() {
+        presentSheet(LegacyInspectorViewController(), width: 640, height: 720)
+    }
+
+    private func showMatrixEditor() {
+        presentSheet(LegacyMatrixEditorViewController(), width: 720, height: 760)
+    }
+
+    private func showProgramInfo() {
+        calculator.inspect(includeProgram: true) { [weak self] s in
+            guard let self = self else { return }
+            guard let s = s else {
+                self.alert("Program Info", "The program could not be read from the calculator.")
+                return
+            }
+            self.presentSheet(LegacyProgramInfoViewController(snapshot: s), width: 680, height: 780)
+        }
+    }
+
+    private func saveNotes() {
+        do {
+            let data = try LegacyProgramNotes.shared.notesData()
+            let name = LegacyProgramNotes.shared.baseName + "." + ProgramDocument.fileExtension
+            LegacyDocumentExport.share(data, name: name, from: self, source: menuButton)
+        } catch {
+            alert("VoyagerCalc", "The notes could not be written: \(error.localizedDescription)")
+        }
+    }
+
+    private func exportDocumentation(pdf: Bool) {
+        calculator.inspect(includeProgram: true) { [weak self] s in
+            guard let self = self else { return }
+            guard let s = s else {
+                self.alert("VoyagerCalc", "The program could not be read from the calculator.")
+                return
+            }
+            let notes = LegacyProgramNotes.shared
+            let name = notes.content(s).title + (pdf ? " documentation.pdf" : " listing.txt")
+            DispatchQueue.global(qos: .userInitiated).async {
+                let data = pdf ? notes.pdfData(s) : notes.textData(s)
+                DispatchQueue.main.async {
+                    LegacyDocumentExport.share(data, name: name, from: self, source: self.menuButton)
+                }
+            }
+        }
+    }
+
+    private func notesPicked(_ url: URL) {
+        let ok = url.startAccessingSecurityScopedResource()
+        defer { if ok { url.stopAccessingSecurityScopedResource() } }
+        do {
+            var document = try ProgramDocument.decode(try Data(contentsOf: url))
+            calculator.inspect(includeProgram: true) { [weak self] s in
+                guard let self = self else { return }
+                if let s = s, s.hasProgram, !s.program.isEmpty {
+                    let report = document.rematch(to: s.program)
+                    if report.orphaned > 0 {
+                        self.alert("Program Notes", "\(report.orphaned) comment(s) in “\(url.lastPathComponent)” no longer match a step of the program in the calculator. They are kept and listed in Program Info.")
+                    }
+                }
+                LegacyProgramNotes.shared.replace(with: document)
+            }
+        } catch {
+            alert("Program Notes", "“\(url.lastPathComponent)” is not a VoyagerCalc program notes file.")
+        }
     }
 }
