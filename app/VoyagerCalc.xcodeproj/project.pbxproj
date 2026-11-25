@@ -64,33 +64,40 @@
 			path = Sources/Models/ExportNames.swift;
 			sourceTree = SOURCE_ROOT;
 		};
+		01BC89DB2386287D9D5C7D7F = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A40F71CE6C95201BAE5AD1CD,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01EE620E857A1D3BE7031713 = {
 			isa = PBXGroup;
 			children = (
-				A3CEC12E380090A0B1D0CCC2,
-				5D2EDD33C9C781839EEA786B,
-				E34BE846D996CB8C5AAE21B1,
-				C03185A6468B091E0F2C0C0D,
-				84FD536F043DFC1A8B300F2A,
 			);
 			name = Faces;
 			sourceTree = "<group>";
+		};
+		033072860A9B614A1877D023 = {
+			isa = PBXBuildFile;
+			fileRef = 769428F0F53B7F7949D1730D;
 		};
 		034BAA0F3E9BDC2D650892AB = {
 			isa = PBXBuildFile;
 			fileRef = 57E82F282011E365C42005C1;
 		};
+		03723D8E1E6B407BC953117B = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = LegacyCalculator.swift;
+			path = Sources/Legacy/LegacyCalculator.swift;
+			sourceTree = SOURCE_ROOT;
+		};
 		07397A2F99A50B879619D1E8 = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1782C98FC01A6DED339026AD,
-				4440D8451501DCB6DD545A21,
-				10BB00A36AC53FB0E2CEDC9D,
-				7677B7A7B3BB4E281DB842F7,
-				313336B9508482ED30CB3EFE,
-				6BF48D7CC508E8AE5B9F160B,
-				8DE25832FB395C4A809AC29C,
 				78D6D32DCF1167F2E0667373,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,6 +105,13 @@
 		091E26123CC06489BBDD6E84 = {
 			isa = PBXBuildFile;
 			fileRef = ECB36F032B52A7CF7EE95552;
+		};
+		09579F76DCEB52B74F7EF1FD = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = CalculatorFaceView.swift;
+			path = Sources/Legacy/CalculatorFaceView.swift;
+			sourceTree = SOURCE_ROOT;
 		};
 		0A1AA2FF225250FF487CA910 = {
 			isa = PBXBuildFile;
@@ -119,9 +133,9 @@
 			isa = PBXBuildFile;
 			fileRef = 10CADC6398D1884D2E3B7BBE;
 		};
-		10BB00A36AC53FB0E2CEDC9D = {
+		0F1F7ACCA5AE97DC5A905D60 = {
 			isa = PBXBuildFile;
-			fileRef = E34BE846D996CB8C5AAE21B1;
+			fileRef = 1CE5DF216092179C52535476;
 		};
 		10CADC6398D1884D2E3B7BBE = {
 			isa = PBXFileReference;
@@ -129,6 +143,10 @@
 			name = FirmwareStore.swift;
 			path = Sources/App/FirmwareStore.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		112B4A4D86E6787925AE9DC1 = {
+			isa = PBXBuildFile;
+			fileRef = 9BCA0C5D32E7FF0ACE209C83;
 		};
 		1143AC6FD830ED8EFDCEAA8A = {
 			isa = PBXBuildFile;
@@ -139,6 +157,13 @@
 			lastKnownFileType = sourcecode.swift;
 			name = MemoryDocTests.swift;
 			path = Tests/KitTests/MemoryDocTests.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		11CF7A00A74FDFF57F0874F8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = LegacyMatrixEditor.swift;
+			path = Sources/Legacy/LegacyMatrixEditor.swift;
 			sourceTree = SOURCE_ROOT;
 		};
 		13546A2F2E54AD5C84052525 = {
@@ -171,6 +196,10 @@
 			path = Sources/Models/Model16C.swift;
 			sourceTree = SOURCE_ROOT;
 		};
+		16ADF19DDE914605C1B9EDC2 = {
+			isa = PBXBuildFile;
+			fileRef = 0110F7C7479EE091FE91C5DA;
+		};
 		170D484BC52458DF377D2CAC = {
 			isa = PBXBuildFile;
 			fileRef = A6912AC693B64DA258A7E12C;
@@ -178,10 +207,6 @@
 		1740C76E09DF200B5F79EF28 = {
 			isa = PBXBuildFile;
 			fileRef = FD94D6F2B5D517CC5A0EB7B9;
-		};
-		1782C98FC01A6DED339026AD = {
-			isa = PBXBuildFile;
-			fileRef = A3CEC12E380090A0B1D0CCC2;
 		};
 		18DAA906FE39BBD095D03371 = {
 			isa = PBXFileReference;
@@ -194,13 +219,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DED28C032B7C9A3FEB7E8B3,
-				B7304EED7F1517E58EAF4335,
-				FC04A1D6A72A9AEFCB449473,
-				9F4C4CA5C034CF9D86ECC228,
-				4381955E4751EED3C68D165E,
-				D12F5107CADF766A911CCF1D,
-				E46DD5594F3CA61FA107538F,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,10 +377,6 @@
 			isa = PBXBuildFile;
 			fileRef = 580CBBF8F0E3D8E271429AF7;
 		};
-		20FCF933187D9E4C4E9A3A3F = {
-			isa = PBXBuildFile;
-			fileRef = 84FD536F043DFC1A8B300F2A;
-		};
 		2144EB5BAC889DBBF3F06FC9 = {
 			isa = PBXBuildFile;
 			fileRef = 0110F7C7479EE091FE91C5DA;
@@ -471,10 +485,18 @@
 			children = (
 				F2F95540D2A3F3DB273E8922,
 				DAFC450E21001F7660F2F40F,
+				B89B7FB26ED48B0A11422F22,
 				64F8A663F954590DD466B5FF,
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		2AEC106E503A6DC139477528 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = CalculatorViewController.swift;
+			path = Sources/Legacy/CalculatorViewController.swift;
+			sourceTree = SOURCE_ROOT;
 		};
 		2AF11A6BF00102800817FFF4 = {
 			isa = PBXBuildFile;
@@ -494,6 +516,10 @@
 			name = ProgramDocTests.swift;
 			path = Tests/KitTests/ProgramDocTests.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		2D2BA6F3329D067F349658BC = {
+			isa = PBXBuildFile;
+			fileRef = A889BDE61CDC45D1950973BE;
 		};
 		2DDE0C4A784B9C331CFC1254 = {
 			isa = XCConfigurationList;
@@ -526,10 +552,6 @@
 		2EFAD034D1DF71DD65B0B36A = {
 			isa = PBXBuildFile;
 			fileRef = 15C33C40C9EA933B52D6B9BA;
-		};
-		313336B9508482ED30CB3EFE = {
-			isa = PBXBuildFile;
-			fileRef = 84FD536F043DFC1A8B300F2A;
 		};
 		3184AC997C8F88876EF76A8C = {
 			isa = PBXGroup;
@@ -569,6 +591,13 @@
 			path = Tests/KitTests/Manz15CTests.swift;
 			sourceTree = SOURCE_ROOT;
 		};
+		32EE1D337F0D83E3F403548E = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			name = Info.plist;
+			path = Resources/iOS12/Info.plist;
+			sourceTree = SOURCE_ROOT;
+		};
 		357BA217F0A070BF3359E177 = {
 			isa = PBXBuildFile;
 			fileRef = CDD1379317EEC3C525FF7FD0;
@@ -581,6 +610,10 @@
 			isa = PBXBuildFile;
 			fileRef = FE7C6D00EBBD4C6D2F37D7F9;
 		};
+		3649BFAB7A3C29A1881E56EF = {
+			isa = PBXBuildFile;
+			fileRef = 580CBBF8F0E3D8E271429AF7;
+		};
 		36D80EB1B02BAC0E061A0B9B = {
 			isa = PBXBuildFile;
 			fileRef = F9E7EA1BE0224B14C04DA5ED;
@@ -589,9 +622,37 @@
 			isa = PBXBuildFile;
 			fileRef = 42B639A6789278D5A422DBC8;
 		};
+		3A02BA516D415C58DF03EC83 = {
+			isa = PBXBuildFile;
+			fileRef = E0C4EB82E657510FF3200EA9;
+		};
 		3A6E9BC12E1850D756B75859 = {
 			isa = PBXBuildFile;
 			fileRef = 15C33C40C9EA933B52D6B9BA;
+		};
+		3AB8A6F3F7006BCD3B00AD57 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = LCDCanvasView.swift;
+			path = Sources/Legacy/LCDCanvasView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		3ADD895F6A00A85FAF925725 = {
+			isa = PBXGroup;
+			children = (
+				3D7FE838C72886349DA0A3BF,
+				09579F76DCEB52B74F7EF1FD,
+				2AEC106E503A6DC139477528,
+				3AB8A6F3F7006BCD3B00AD57,
+				03723D8E1E6B407BC953117B,
+				490E1C487CC694FAB0645104,
+				652703729C2777F4939B0B70,
+				CB1B3AC8D806FAC1B4F57D16,
+				11CF7A00A74FDFF57F0874F8,
+				E0C4EB82E657510FF3200EA9,
+			);
+			name = "Legacy (iOS 12)";
+			sourceTree = "<group>";
 		};
 		3BD9890281AEFA5DF1B660CD = {
 			isa = PBXFileReference;
@@ -599,6 +660,35 @@
 			name = LCDView.swift;
 			path = Sources/Views/LCDView.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		3CADEC6820B925CB5009E1BC = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SWIFT_VERSION = 5.0;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../core/include";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../core/include";
+				GCC_C_LANGUAGE_STANDARD = c11;
+				CLANG_ENABLE_MODULES = YES;
+				MARKETING_VERSION = 0.7.5;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				PRODUCT_NAME = VoyagerCalcLegacy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegonzalezdivasson.VoyagerCalc.legacy;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				INFOPLIST_FILE = Resources/iOS12/Info.plist;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				GCC_OPTIMIZATION_LEVEL = 2;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				ONLY_ACTIVE_ARCH = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+			};
+			name = Debug;
 		};
 		3CBED2631D247643FCEAC24C = {
 			isa = PBXFileReference;
@@ -622,6 +712,13 @@
 			isa = PBXBuildFile;
 			fileRef = A6912AC693B64DA258A7E12C;
 		};
+		3D7FE838C72886349DA0A3BF = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = AppDelegate.swift;
+			path = Sources/Legacy/AppDelegate.swift;
+			sourceTree = SOURCE_ROOT;
+		};
 		3E43AD280AEAF33CCF48749A = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -643,6 +740,10 @@
 			name = MemoryFileNames.swift;
 			path = Sources/Models/MemoryFileNames.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		3F939DDBD073A3ED686C7AE0 = {
+			isa = PBXBuildFile;
+			fileRef = 85CCF971F1C46CA577258A9E;
 		};
 		4177A5E40D4896F13C677FF1 = {
 			isa = PBXBuildFile;
@@ -677,25 +778,17 @@
 			path = Sources/Core/CalculatorMachine.swift;
 			sourceTree = SOURCE_ROOT;
 		};
-		4381955E4751EED3C68D165E = {
+		4354A0762A6FFDE5C17E5078 = {
 			isa = PBXBuildFile;
-			fileRef = 84FD536F043DFC1A8B300F2A;
+			fileRef = 2488AC708C9DC26D88CCC488;
 		};
 		44144B9ADD90F839210B3C08 = {
 			isa = PBXBuildFile;
 			fileRef = B93D9DA55F4FD1D301EBECDA;
 		};
-		4440D8451501DCB6DD545A21 = {
-			isa = PBXBuildFile;
-			fileRef = 5D2EDD33C9C781839EEA786B;
-		};
 		44BDF878FD934CE33377CF5C = {
 			isa = PBXBuildFile;
 			fileRef = 42FCFD3423041C1C7A26C62D;
-		};
-		469DAB3925B3A380499D3242 = {
-			isa = PBXBuildFile;
-			fileRef = 5D2EDD33C9C781839EEA786B;
 		};
 		46DAAD26704CE28F6A90E298 = {
 			isa = PBXFileReference;
@@ -703,6 +796,33 @@
 			name = CalculatorModel.swift;
 			path = Sources/Models/CalculatorModel.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		46E356621B9C3DA56547C542 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SWIFT_VERSION = 5.0;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../core/include";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../core/include";
+				GCC_C_LANGUAGE_STANDARD = c11;
+				CLANG_ENABLE_MODULES = YES;
+				MARKETING_VERSION = 0.7.5;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				PRODUCT_NAME = VoyagerCalcLegacy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegonzalezdivasson.VoyagerCalc.legacy;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				INFOPLIST_FILE = Resources/iOS12/Info.plist;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				GCC_OPTIMIZATION_LEVEL = 2;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+			};
+			name = Release;
 		};
 		46F86FAA6BBF9AC94A7E4595 = {
 			isa = PBXProject;
@@ -726,6 +846,7 @@
 			targets = (
 				E15AFCCBF1442F35EAEB1350,
 				22919E30D41DF7AC5FA58A3A,
+				AE4847A4E83C5C22245E7843,
 				EE0329E21E66BED128E77DAA,
 			);
 		};
@@ -737,6 +858,17 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		473AA0F3D876BE4176AE6B35 = {
+			isa = PBXBuildFile;
+			fileRef = FF77BE7CFD837746F961E75E;
+		};
+		490E1C487CC694FAB0645104 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = LegacyDrawing.swift;
+			path = Sources/Legacy/LegacyDrawing.swift;
+			sourceTree = SOURCE_ROOT;
 		};
 		4974FEC715925E740C1E0F3C = {
 			isa = PBXBuildFile;
@@ -769,11 +901,16 @@
 			isa = PBXBuildFile;
 			fileRef = A37F3D72C366A6567553851E;
 		};
+		4E0508CB5B683C6247F52839 = {
+			isa = PBXBuildFile;
+			fileRef = A37F3D72C366A6567553851E;
+		};
 		4EAE695AD1F489F78EA3E1C6 = {
 			isa = PBXGroup;
 			children = (
 				267AEBE1BACFD8AB573455B5,
 				785A62F6730D915597ED2079,
+				3ADD895F6A00A85FAF925725,
 				647E7164A06FF71518326D10,
 				D124483EF0233AEE30ED7A11,
 				F6C6CCFB1C73A9F50BC5BF2F,
@@ -820,10 +957,6 @@
 			isa = PBXBuildFile;
 			fileRef = 9D28941E8647B1B90B85BE3F;
 		};
-		506138620E1D7B21740EA497 = {
-			isa = PBXBuildFile;
-			fileRef = C03185A6468B091E0F2C0C0D;
-		};
 		50A154238F9CF2A25A18FBA9 = {
 			isa = PBXBuildFile;
 			fileRef = 85CCF971F1C46CA577258A9E;
@@ -835,6 +968,62 @@
 		52A35601DD16AE312AB119D4 = {
 			isa = PBXBuildFile;
 			fileRef = 42B639A6789278D5A422DBC8;
+		};
+		5384CBDF9901584CE36A3097 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F024110DF68DDFE62B2FC02C,
+				A280ECC2836A83A120E508A9,
+				EB1D1182CBC28E85BD015CDD,
+				84FEDECB3A975CB2A1746DB2,
+				AB5B988A6006829A0803BDA1,
+				E8EA1843ABDEFD3F98CD24CB,
+				812A012CC2A1C9779156FAC4,
+				A7F0E23CCB73431FEAEDCC6B,
+				AD748128B45461F58047E1DD,
+				3A02BA516D415C58DF03EC83,
+				DEDA307A0295F7BADC1D1140,
+				2D2BA6F3329D067F349658BC,
+				3F939DDBD073A3ED686C7AE0,
+				53E5F3A22CCAA3AD50EBBE6C,
+				E562772B7B7B2140D973C919,
+				FC64DBFE01006662C5FF2AD6,
+				D56914B5CEF0211713154474,
+				877A0107E986D4F0B671A437,
+				4E0508CB5B683C6247F52839,
+				CDCBC7E71F26E99BBA9107BC,
+				F6052F0F2605DFB0DEC4F5F1,
+				BACFCA1836FBC1A680D1A2BA,
+				66C1C274D5AEABAA5B9DCCEF,
+				85B2DFCFEFBFDCF3A895DCA9,
+				033072860A9B614A1877D023,
+				BBB0908E9877802BE7A1BDB5,
+				E131B3E2DE4DC32F398B56CC,
+				16ADF19DDE914605C1B9EDC2,
+				9E84FFD3B2F1C5991E8ED64F,
+				A0EFD1C07709238757267141,
+				9CC7A0B84ABED0F95154575B,
+				70C13AD4E52AFE7143713800,
+				112B4A4D86E6787925AE9DC1,
+				AB65277FFF895E2508856027,
+				D344F7F30ADE1D665B247AA8,
+				3649BFAB7A3C29A1881E56EF,
+				4354A0762A6FFDE5C17E5078,
+				82E2E73055FBD5170456352A,
+				C1E29E4A5CD22EF10404491D,
+				FD1FB30BB8E3C5D329E57CFA,
+				C85AD6B4B6248876E6B25BFF,
+				0F1F7ACCA5AE97DC5A905D60,
+				473AA0F3D876BE4176AE6B35,
+				ECBEC9C527236D7E5219B3F6,
+				F765261D6756B544A7E4FDE6,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53E5F3A22CCAA3AD50EBBE6C = {
+			isa = PBXBuildFile;
+			fileRef = 723564C7EB71E7246DF209C8;
 		};
 		5463692A99E3B0065B2B3569 = {
 			isa = PBXFileReference;
@@ -917,13 +1106,6 @@
 			isa = PBXBuildFile;
 			fileRef = 18DAA906FE39BBD095D03371;
 		};
-		5D2EDD33C9C781839EEA786B = {
-			isa = PBXFileReference;
-			lastKnownFileType = image.png;
-			name = back_16c.png;
-			path = Resources/Faces/back_16c.png;
-			sourceTree = SOURCE_ROOT;
-		};
 		5F29FE9150B527C1858B8144 = {
 			isa = PBXBuildFile;
 			fileRef = 8C8AB9D81655E8E2ADBB8025;
@@ -981,15 +1163,20 @@
 			path = VoyagerCalcTests.xctest;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		66A95CEA1A04499D90997B75 = {
+		652703729C2777F4939B0B70 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = LegacyEngine.swift;
+			path = Sources/Legacy/LegacyEngine.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		66C1C274D5AEABAA5B9DCCEF = {
 			isa = PBXBuildFile;
-			fileRef = EEE38C2F18BD3590DEAC9835;
+			fileRef = 850AE0AEFE9C2D583129C3E6;
 		};
 		67217F514C5B00F432CEAA29 = {
 			isa = PBXGroup;
 			children = (
-				EEE38C2F18BD3590DEAC9835,
-				790B7E0EC1583C2071D695C8,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -1013,20 +1200,12 @@
 			path = Sources/Core/Matrix15.swift;
 			sourceTree = SOURCE_ROOT;
 		};
-		6BF48D7CC508E8AE5B9F160B = {
-			isa = PBXBuildFile;
-			fileRef = EEE38C2F18BD3590DEAC9835;
-		};
 		6CEE6805A966D94481DD6B57 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
 			name = CalculatorBackView.swift;
 			path = Sources/Views/CalculatorBackView.swift;
 			sourceTree = SOURCE_ROOT;
-		};
-		6DED28C032B7C9A3FEB7E8B3 = {
-			isa = PBXBuildFile;
-			fileRef = A3CEC12E380090A0B1D0CCC2;
 		};
 		6E2D55618A70C2952357CCE5 = {
 			isa = PBXBuildFile;
@@ -1057,6 +1236,10 @@
 			path = Sources/App/MatrixEditorModel.swift;
 			sourceTree = SOURCE_ROOT;
 		};
+		70C13AD4E52AFE7143713800 = {
+			isa = PBXBuildFile;
+			fileRef = 014797890B1E34E937C503AB;
+		};
 		71782593873C62CF35B7DBC4 = {
 			isa = PBXBuildFile;
 			fileRef = A37F3D72C366A6567553851E;
@@ -1076,13 +1259,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF61E1A6F0E50C5D0635FA9A,
-				469DAB3925B3A380499D3242,
-				C316DF9F61326E18C237B76C,
-				506138620E1D7B21740EA497,
-				20FCF933187D9E4C4E9A3A3F,
-				66A95CEA1A04499D90997B75,
-				8273AEC02A15750E4AE0B347,
 				1F205298CA170F71DA1F8061,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1127,10 +1303,6 @@
 			isa = PBXBuildFile;
 			fileRef = 18DAA906FE39BBD095D03371;
 		};
-		7677B7A7B3BB4E281DB842F7 = {
-			isa = PBXBuildFile;
-			fileRef = C03185A6468B091E0F2C0C0D;
-		};
 		769428F0F53B7F7949D1730D = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -1157,6 +1329,7 @@
 				FA253C69BA71AD66580E061F,
 				93A33A1BCB62BC03081B214C,
 				8768F603ABD8987184FE2AD4,
+				32EE1D337F0D83E3F403548E,
 				EB90DFA2C8D48C4027AD486C,
 				997D138B0DF125927A5D4EBC,
 			);
@@ -1193,13 +1366,6 @@
 			isa = PBXBuildFile;
 			fileRef = EB90DFA2C8D48C4027AD486C;
 		};
-		790B7E0EC1583C2071D695C8 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = HP15CSimulatorKeys.ttf;
-			path = Resources/Fonts/HP15CSimulatorKeys.ttf;
-			sourceTree = SOURCE_ROOT;
-		};
 		7A680F6C10F68841D73B92F7 = {
 			isa = PBXBuildFile;
 			fileRef = FE7C6D00EBBD4C6D2F37D7F9;
@@ -1216,16 +1382,17 @@
 			isa = PBXBuildFile;
 			fileRef = 995E34ABEEE881A58BFB655B;
 		};
-		8273AEC02A15750E4AE0B347 = {
+		812A012CC2A1C9779156FAC4 = {
 			isa = PBXBuildFile;
-			fileRef = 790B7E0EC1583C2071D695C8;
+			fileRef = 652703729C2777F4939B0B70;
 		};
-		84FD536F043DFC1A8B300F2A = {
-			isa = PBXFileReference;
-			lastKnownFileType = image.png;
-			name = face_16c_nolcd.png;
-			path = Resources/Faces/face_16c_nolcd.png;
-			sourceTree = SOURCE_ROOT;
+		82E2E73055FBD5170456352A = {
+			isa = PBXBuildFile;
+			fileRef = 15C33C40C9EA933B52D6B9BA;
+		};
+		84FEDECB3A975CB2A1746DB2 = {
+			isa = PBXBuildFile;
+			fileRef = 3AB8A6F3F7006BCD3B00AD57;
 		};
 		850AE0AEFE9C2D583129C3E6 = {
 			isa = PBXFileReference;
@@ -1233,6 +1400,10 @@
 			name = Pool15.swift;
 			path = Sources/Core/Pool15.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		85B2DFCFEFBFDCF3A895DCA9 = {
+			isa = PBXBuildFile;
+			fileRef = 995E34ABEEE881A58BFB655B;
 		};
 		85CCF971F1C46CA577258A9E = {
 			isa = PBXFileReference;
@@ -1258,6 +1429,10 @@
 			name = VoyagerCalc.entitlements;
 			path = Resources/macOS/VoyagerCalc.entitlements;
 			sourceTree = SOURCE_ROOT;
+		};
+		877A0107E986D4F0B671A437 = {
+			isa = PBXBuildFile;
+			fileRef = C14F6371AA56F9FF95257EB4;
 		};
 		87F0D507CAD02CF9E34B1FA9 = {
 			isa = PBXBuildFile;
@@ -1350,10 +1525,6 @@
 			path = Tests/KitTests/LegendClickTests.swift;
 			sourceTree = SOURCE_ROOT;
 		};
-		8DE25832FB395C4A809AC29C = {
-			isa = PBXBuildFile;
-			fileRef = 790B7E0EC1583C2071D695C8;
-		};
 		8E8B8DFBCBC8D3BFCA3BD340 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -1375,6 +1546,13 @@
 			name = FontPDFTests.swift;
 			path = Tests/KitTests/FontPDFTests.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		90BCAF59F274D3F51773E5FE = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		917E1980681BC62483DA4FF1 = {
 			isa = PBXFileReference;
@@ -1412,6 +1590,15 @@
 		94518A007B821CA0F226E508 = {
 			isa = PBXBuildFile;
 			fileRef = 2488AC708C9DC26D88CCC488;
+		};
+		95E335A580093B60205102D5 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CADEC6820B925CB5009E1BC,
+				46E356621B9C3DA56547C542,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 		96707B8BA1830F34CFE0B7B8 = {
 			isa = PBXBuildFile;
@@ -1468,6 +1655,10 @@
 			path = Sources/Views/MatrixEditorView.swift;
 			sourceTree = SOURCE_ROOT;
 		};
+		9CC7A0B84ABED0F95154575B = {
+			isa = PBXBuildFile;
+			fileRef = 46DAAD26704CE28F6A90E298;
+		};
 		9D28941E8647B1B90B85BE3F = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -1483,9 +1674,9 @@
 			isa = PBXBuildFile;
 			fileRef = 1D62EC49570A79EF2509F35F;
 		};
-		9F4C4CA5C034CF9D86ECC228 = {
+		9E84FFD3B2F1C5991E8ED64F = {
 			isa = PBXBuildFile;
-			fileRef = C03185A6468B091E0F2C0C0D;
+			fileRef = 77936B128A58AFA226549BD0;
 		};
 		9F8CE8FF8FFF1A9D63005EB5 = {
 			isa = PBXBuildFile;
@@ -1498,6 +1689,10 @@
 		A038664771C196643C26BD61 = {
 			isa = PBXBuildFile;
 			fileRef = A2189B56850B71845656BB05;
+		};
+		A0EFD1C07709238757267141 = {
+			isa = PBXBuildFile;
+			fileRef = 13546A2F2E54AD5C84052525;
 		};
 		A1C288E5ED4BB76C94004444 = {
 			isa = PBXBuildFile;
@@ -1514,6 +1709,10 @@
 			isa = PBXBuildFile;
 			fileRef = 116F203AFBD2C5384BDEFAC9;
 		};
+		A280ECC2836A83A120E508A9 = {
+			isa = PBXBuildFile;
+			fileRef = 09579F76DCEB52B74F7EF1FD;
+		};
 		A2ECB73F760D999A025553F7 = {
 			isa = PBXBuildFile;
 			fileRef = 1DB2007D79AC7360447C1952;
@@ -1529,19 +1728,16 @@
 			path = Sources/Core/Manz15CProgram.swift;
 			sourceTree = SOURCE_ROOT;
 		};
-		A3CEC12E380090A0B1D0CCC2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = image.png;
-			name = back_15c.png;
-			path = Resources/Faces/back_15c.png;
-			sourceTree = SOURCE_ROOT;
-		};
 		A4077BA3E90E1073D500173A = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
 			name = Release065Tests.swift;
 			path = Tests/AppTests/Release065Tests.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		A40F71CE6C95201BAE5AD1CD = {
+			isa = PBXBuildFile;
+			fileRef = BB1E879269236432A3C16ED1;
 		};
 		A4A81C27C7E9B36BAC43F82B = {
 			isa = PBXBuildFile;
@@ -1563,6 +1759,10 @@
 			path = Sources/App/AppModel.swift;
 			sourceTree = SOURCE_ROOT;
 		};
+		A7F0E23CCB73431FEAEDCC6B = {
+			isa = PBXBuildFile;
+			fileRef = CB1B3AC8D806FAC1B4F57D16;
+		};
 		A889BDE61CDC45D1950973BE = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -1574,9 +1774,17 @@
 			isa = PBXBuildFile;
 			fileRef = 8699A42CD18361074F9B2845;
 		};
+		AB5B988A6006829A0803BDA1 = {
+			isa = PBXBuildFile;
+			fileRef = 03723D8E1E6B407BC953117B;
+		};
 		AB5EC449D644CF06C21910B4 = {
 			isa = PBXBuildFile;
 			fileRef = 850AE0AEFE9C2D583129C3E6;
+		};
+		AB65277FFF895E2508856027 = {
+			isa = PBXBuildFile;
+			fileRef = D0A8CC101E87685A10934A58;
 		};
 		AB9C014EC986E7462CBAD67D = {
 			isa = PBXFileReference;
@@ -1625,16 +1833,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AD748128B45461F58047E1DD = {
+			isa = PBXBuildFile;
+			fileRef = 11CF7A00A74FDFF57F0874F8;
+		};
+		AE4847A4E83C5C22245E7843 = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95E335A580093B60205102D5;
+			buildPhases = (
+				5384CBDF9901584CE36A3097,
+				90BCAF59F274D3F51773E5FE,
+				01BC89DB2386287D9D5C7D7F,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "VoyagerCalc-iOS12";
+			productName = VoyagerCalc;
+			productReference = B89B7FB26ED48B0A11422F22;
+			productType = "com.apple.product-type.application";
+		};
 		AE8D87A2F3A4A82050F2820A = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
 			name = PhotoFaceGeometry.swift;
 			path = Sources/Models/PhotoFaceGeometry.swift;
 			sourceTree = SOURCE_ROOT;
-		};
-		AF61E1A6F0E50C5D0635FA9A = {
-			isa = PBXBuildFile;
-			fileRef = A3CEC12E380090A0B1D0CCC2;
 		};
 		AFEAAA983BF37F335E721EBB = {
 			isa = PBXBuildFile;
@@ -1690,10 +1915,6 @@
 			isa = PBXBuildFile;
 			fileRef = 56BA1FF3F43CC0D55A4A6EAF;
 		};
-		B7304EED7F1517E58EAF4335 = {
-			isa = PBXBuildFile;
-			fileRef = 5D2EDD33C9C781839EEA786B;
-		};
 		B7E0950847D34F627D5B1A87 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -1708,6 +1929,13 @@
 		B8917169D9FE92185A359A1C = {
 			isa = PBXBuildFile;
 			fileRef = B93D9DA55F4FD1D301EBECDA;
+		};
+		B89B7FB26ED48B0A11422F22 = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.application;
+			includeInIndex = 0;
+			path = VoyagerCalcLegacy.app;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		B8D254D4656D073A1214BF72 = {
 			isa = PBXBuildFile;
@@ -1728,9 +1956,24 @@
 			isa = PBXBuildFile;
 			fileRef = 9CAA240BF55F216979479A9E;
 		};
+		BACFCA1836FBC1A680D1A2BA = {
+			isa = PBXBuildFile;
+			fileRef = E4B6F0A2FF68591A4D130DEB;
+		};
+		BB1E879269236432A3C16ED1 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file.storyboard;
+			name = LaunchScreen.storyboard;
+			path = Resources/iOS12/LaunchScreen.storyboard;
+			sourceTree = SOURCE_ROOT;
+		};
 		BB37367D9BD14587FFB1764F = {
 			isa = PBXBuildFile;
 			fileRef = 9329309CB045D4B91F4154BF;
+		};
+		BBB0908E9877802BE7A1BDB5 = {
+			isa = PBXBuildFile;
+			fileRef = 18DAA906FE39BBD095D03371;
 		};
 		BDBD736D12FAD5B8B319DBA9 = {
 			isa = PBXFileReference;
@@ -1759,13 +2002,6 @@
 			isa = PBXBuildFile;
 			fileRef = 9CAA240BF55F216979479A9E;
 		};
-		C03185A6468B091E0F2C0C0D = {
-			isa = PBXFileReference;
-			lastKnownFileType = image.png;
-			name = face_15c_nolcd.png;
-			path = Resources/Faces/face_15c_nolcd.png;
-			sourceTree = SOURCE_ROOT;
-		};
 		C040CF67CE8D146F8FBF3D8F = {
 			isa = PBXBuildFile;
 			fileRef = 7360566B49A1C5517659DBB6;
@@ -1788,6 +2024,10 @@
 			path = Tests/AppTests/SnapshotTests.swift;
 			sourceTree = SOURCE_ROOT;
 		};
+		C1E29E4A5CD22EF10404491D = {
+			isa = PBXBuildFile;
+			fileRef = 8C8AB9D81655E8E2ADBB8025;
+		};
 		C2B2A857A0669303B5DBDB12 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.swift;
@@ -1802,10 +2042,6 @@
 		C2D6C98101C84C3704EF2E45 = {
 			isa = PBXBuildFile;
 			fileRef = 769428F0F53B7F7949D1730D;
-		};
-		C316DF9F61326E18C237B76C = {
-			isa = PBXBuildFile;
-			fileRef = E34BE846D996CB8C5AAE21B1;
 		};
 		C31B32C809B72BA16D8465D0 = {
 			isa = PBXBuildFile;
@@ -1829,6 +2065,10 @@
 			name = FirmwareLoadTests.swift;
 			path = Tests/KitTests/FirmwareLoadTests.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		C85AD6B4B6248876E6B25BFF = {
+			isa = PBXBuildFile;
+			fileRef = 1DB2007D79AC7360447C1952;
 		};
 		C87EDC2F134E3DACE8C7D418 = {
 			isa = PBXSourcesBuildPhase;
@@ -1917,6 +2157,13 @@
 			isa = PBXBuildFile;
 			fileRef = 995E34ABEEE881A58BFB655B;
 		};
+		CB1B3AC8D806FAC1B4F57D16 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = LegacyInspector.swift;
+			path = Sources/Legacy/LegacyInspector.swift;
+			sourceTree = SOURCE_ROOT;
+		};
 		CB276DF96369AA027173D802 = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1954,6 +2201,10 @@
 			name = Release074Tests.swift;
 			path = Tests/AppTests/Release074Tests.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		CDCBC7E71F26E99BBA9107BC = {
+			isa = PBXBuildFile;
+			fileRef = 6BF37C158E3B6DF92C1AF083;
 		};
 		CDD1379317EEC3C525FF7FD0 = {
 			isa = PBXFileReference;
@@ -1998,10 +2249,6 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		D12F5107CADF766A911CCF1D = {
-			isa = PBXBuildFile;
-			fileRef = EEE38C2F18BD3590DEAC9835;
-		};
 		D234D858F0D4BBF9015606C1 = {
 			isa = PBXBuildFile;
 			fileRef = 9BCA0C5D32E7FF0ACE209C83;
@@ -2013,6 +2260,10 @@
 		D2AC06109641F9EC6DE9725A = {
 			isa = PBXBuildFile;
 			fileRef = A37F3D72C366A6567553851E;
+		};
+		D344F7F30ADE1D665B247AA8 = {
+			isa = PBXBuildFile;
+			fileRef = 3F3D94CC9068B7EE2252A95E;
 		};
 		D42F5D734E79135416D36E0C = {
 			isa = PBXBuildFile;
@@ -2039,6 +2290,10 @@
 		D4C03244D9D178FD1F5EEC28 = {
 			isa = PBXBuildFile;
 			fileRef = 3BD9890281AEFA5DF1B660CD;
+		};
+		D56914B5CEF0211713154474 = {
+			isa = PBXBuildFile;
+			fileRef = 57E82F282011E365C42005C1;
 		};
 		D5879AAFA868ECFD059257C1 = {
 			isa = PBXBuildFile;
@@ -2112,6 +2367,10 @@
 			isa = PBXBuildFile;
 			fileRef = DDD2D18926FA768D94B60EFF;
 		};
+		DEDA307A0295F7BADC1D1140 = {
+			isa = PBXBuildFile;
+			fileRef = 10CADC6398D1884D2E3B7BBE;
+		};
 		DF80404EB2551A5EBC3DDE4E = {
 			isa = PBXBuildFile;
 			fileRef = 99B439018D90D8FB69CE624F;
@@ -2123,6 +2382,17 @@
 		DFFAF71AC490A16D3BDA11EF = {
 			isa = PBXBuildFile;
 			fileRef = A889BDE61CDC45D1950973BE;
+		};
+		E0C4EB82E657510FF3200EA9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			name = LegacyProgramNotes.swift;
+			path = Sources/Legacy/LegacyProgramNotes.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		E131B3E2DE4DC32F398B56CC = {
+			isa = PBXBuildFile;
+			fileRef = 8E8B8DFBCBC8D3BFCA3BD340;
 		};
 		E15AFCCBF1442F35EAEB1350 = {
 			isa = PBXNativeTarget;
@@ -2153,20 +2423,9 @@
 			isa = PBXBuildFile;
 			fileRef = 7360566B49A1C5517659DBB6;
 		};
-		E34BE846D996CB8C5AAE21B1 = {
-			isa = PBXFileReference;
-			lastKnownFileType = image.png;
-			name = face_12c_nolcd.png;
-			path = Resources/Faces/face_12c_nolcd.png;
-			sourceTree = SOURCE_ROOT;
-		};
 		E3E313ABC3D381CE10009B43 = {
 			isa = PBXBuildFile;
 			fileRef = C6A7DDECBDFA0E9351CDAB92;
-		};
-		E46DD5594F3CA61FA107538F = {
-			isa = PBXBuildFile;
-			fileRef = 790B7E0EC1583C2071D695C8;
 		};
 		E4A2D118C015829DDEAA3077 = {
 			isa = PBXBuildFile;
@@ -2178,6 +2437,10 @@
 			name = PDFWriter.swift;
 			path = Sources/Core/PDFWriter.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		E562772B7B7B2140D973C919 = {
+			isa = PBXBuildFile;
+			fileRef = 42FCFD3423041C1C7A26C62D;
 		};
 		E670084367FDC720651132E2 = {
 			isa = PBXBuildFile;
@@ -2194,6 +2457,10 @@
 		E844DD8844D655EC666F598A = {
 			isa = PBXBuildFile;
 			fileRef = 6BF37C158E3B6DF92C1AF083;
+		};
+		E8EA1843ABDEFD3F98CD24CB = {
+			isa = PBXBuildFile;
+			fileRef = 490E1C487CC694FAB0645104;
 		};
 		E925FB4EC53ADACC8E5AE9D3 = {
 			isa = PBXBuildFile;
@@ -2216,6 +2483,10 @@
 			isa = PBXBuildFile;
 			fileRef = 995E34ABEEE881A58BFB655B;
 		};
+		EB1D1182CBC28E85BD015CDD = {
+			isa = PBXBuildFile;
+			fileRef = 2AEC106E503A6DC139477528;
+		};
 		EB8F56E5E2B8C7532D26EEB0 = {
 			isa = PBXBuildFile;
 			fileRef = 3F3D94CC9068B7EE2252A95E;
@@ -2233,6 +2504,10 @@
 			name = PhotoFaceView.swift;
 			path = Sources/Views/PhotoFaceView.swift;
 			sourceTree = SOURCE_ROOT;
+		};
+		ECBEC9C527236D7E5219B3F6 = {
+			isa = PBXBuildFile;
+			fileRef = A2189B56850B71845656BB05;
 		};
 		ED5A2172C1C47ADE095C7320 = {
 			isa = PBXBuildFile;
@@ -2262,16 +2537,13 @@
 			productReference = 64F8A663F954590DD466B5FF;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		EEE38C2F18BD3590DEAC9835 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = HP15CSimulatorDisplay.ttf;
-			path = Resources/Fonts/HP15CSimulatorDisplay.ttf;
-			sourceTree = SOURCE_ROOT;
-		};
 		F01E669D2154A92C88335570 = {
 			isa = PBXBuildFile;
 			fileRef = 3BD9890281AEFA5DF1B660CD;
+		};
+		F024110DF68DDFE62B2FC02C = {
+			isa = PBXBuildFile;
+			fileRef = 3D7FE838C72886349DA0A3BF;
 		};
 		F2D5095594DB497FCAFFE139 = {
 			isa = PBXBuildFile;
@@ -2291,6 +2563,10 @@
 		F535982F0457486D5D1FA206 = {
 			isa = PBXBuildFile;
 			fileRef = D465F410A60805D1E6CF2078;
+		};
+		F6052F0F2605DFB0DEC4F5F1 = {
+			isa = PBXBuildFile;
+			fileRef = DB4267477E774B1EB19224BC;
 		};
 		F6B4E9840E6D19272280F9C2 = {
 			isa = PBXFileReference;
@@ -2316,6 +2592,10 @@
 			name = "C core (../core)";
 			sourceTree = "<group>";
 		};
+		F765261D6756B544A7E4FDE6 = {
+			isa = PBXBuildFile;
+			fileRef = DDD2D18926FA768D94B60EFF;
+		};
 		F96CDA46AAD831784D626406 = {
 			isa = PBXBuildFile;
 			fileRef = 10CADC6398D1884D2E3B7BBE;
@@ -2338,13 +2618,17 @@
 			isa = PBXBuildFile;
 			fileRef = 8C8AB9D81655E8E2ADBB8025;
 		};
-		FC04A1D6A72A9AEFCB449473 = {
-			isa = PBXBuildFile;
-			fileRef = E34BE846D996CB8C5AAE21B1;
-		};
 		FC2141DF93AF7849BC1D21CC = {
 			isa = PBXBuildFile;
 			fileRef = 3E43AD280AEAF33CCF48749A;
+		};
+		FC64DBFE01006662C5FF2AD6 = {
+			isa = PBXBuildFile;
+			fileRef = 7360566B49A1C5517659DBB6;
+		};
+		FD1FB30BB8E3C5D329E57CFA = {
+			isa = PBXBuildFile;
+			fileRef = AE8D87A2F3A4A82050F2820A;
 		};
 		FD76F4754DEE5144E9ABA818 = {
 			isa = PBXBuildFile;
