@@ -1,0 +1,98 @@
+name: ios12 save memory
+on:
+  push:
+    paths:
+      - .github/workflows/ios12-savememory.yml
+permissions:
+  contents: write
+concurrency: ios12-save-memory
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ios12-port
+      - name: Save Memory File off the main thread
+        run: |
+          python3 - <<'PY'
+          import hashlib, pathlib
+          cvc = pathlib.Path("app/Sources/Legacy/CalculatorViewController.swift")
+          lc = pathlib.Path("app/Sources/Legacy/LegacyCalculator.swift")
+
+          old1 = r"""    private func saveMemory() {
+        guard let data = calculator.memoryImage() else { return }
+        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(calculator.suggestedMemoryFileName())
+        do {
+            try data.write(to: url, options: .atomic)
+        } catch {
+            alert("VoyagerCalc", "Could not write the memory file: \(error.localizedDescription)")
+            return
+        }
+        let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        share.popoverPresentationController?.sourceView = menuButton
+        share.popoverPresentationController?.sourceRect = menuButton.bounds
+        present(share, animated: true)
+    }
+"""
+          new1 = r"""    /// The image is read on the engine thread and comes back on the main queue, so the screen keeps
+    /// running while the calculator is turned off for the copy (the old read waited up to 5 s here).
+    private func saveMemory() {
+        guard calculator.canKeepMemory else { return }
+        calculator.fetchMemory { [weak self] data, _ in
+            guard let self = self else { return }
+            guard let data = data else {
+                self.alert("VoyagerCalc", "The calculator's memory could not be read. Try again.")
+                return
+            }
+            let name = self.calculator.suggestedMemoryFileName()
+            let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(name)
+            do {
+                try data.write(to: url, options: .atomic)
+            } catch {
+                self.alert("VoyagerCalc", "Could not write the memory file: \(error.localizedDescription)")
+                return
+            }
+            let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            share.popoverPresentationController?.sourceView = self.menuButton
+            share.popoverPresentationController?.sourceRect = self.menuButton.bounds
+            self.present(share, animated: true)
+        }
+    }
+"""
+          old2 = r"""    /// The 2 KB memory image, for the share sheet. The calculator is turned off for the copy.
+    func memoryImage() -> Data? {
+        guard let e = engine else { return nil }
+        guard canKeepMemory else {
+            onError?("HP's original firmware keeps its memory in a different layout than the CE firmware, so memory files are not available with it.")
+            return nil
+        }
+        if let data = e.performAndWait(timeout: 5, { m in try? m.memory(turnBackOn: true) }) {
+            if let d = data { return d }
+        }
+        onError?("The calculator did not answer in time; try again.")
+        return nil
+    }
+
+"""
+
+          t = cvc.read_text()
+          assert t.count(old1) == 1, "saveMemory block not found once"
+          cvc.write_text(t.replace(old1, new1))
+
+          t = lc.read_text()
+          assert t.count(old2) == 1, "memoryImage block not found once"
+          lc.write_text(t.replace(old2, ""))
+
+          for p, want in ((cvc, "9792a8f069b536d1bc9f658180ba81e8c9a398440f0cbba374dfea492b9225af"), (lc, "2dd3a96c7ce0e00866891ecf2459824d35217931158c9aa63ffe1c374aed5376")):
+              got = hashlib.sha256(p.read_bytes()).hexdigest()
+              assert got == want, (str(p), got)
+              print(p, got)
+          PY
+      - name: Commit and push
+        run: |
+          git config user.name "VoyagerCalc port"
+          git config user.email "port@localhost"
+          git add -A
+          git commit -q -m "Save Memory File: read the image off the engine thread"
+          git push origin HEAD:ios12-port
