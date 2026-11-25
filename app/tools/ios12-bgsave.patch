@@ -1,0 +1,72 @@
+diff --git a/app/Sources/Legacy/AppDelegate.swift b/app/Sources/Legacy/AppDelegate.swift
+index 8ef830c..7373b9d 100644
+--- a/app/Sources/Legacy/AppDelegate.swift
++++ b/app/Sources/Legacy/AppDelegate.swift
+@@ -30,6 +30,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
+     }
+~
+     func applicationWillTerminate(_ application: UIApplication) {
+-        LegacyCalculator.shared.saveState()
++        LegacyCalculator.shared.saveStateNow()
+     }
+ }
+diff --git a/app/Sources/Legacy/LegacyCalculator.swift b/app/Sources/Legacy/LegacyCalculator.swift
+index 6da59b7..07e4cf0 100644
+--- a/app/Sources/Legacy/LegacyCalculator.swift
++++ b/app/Sources/Legacy/LegacyCalculator.swift
+@@ -8,6 +8,7 @@
+~
+ import AVFoundation
+ import Foundation
++import UIKit
+~
+ final class LegacyCalculator {
+     static let shared = LegacyCalculator()
+@@ -42,6 +43,8 @@ final class LegacyCalculator {
+     private let stateStore = StateStore()
+     private var players: [AVAudioPlayer] = []
+     private var nextPlayer = 0
++    /// The keep-alive the system gave us while the state is written on the way out (nil: none).
++    private var saveTask: UIBackgroundTaskIdentifier?
+~
+     var model: CalculatorModel { CalculatorModel.with(id: snapshot.model) }
+     var hasFirmware: Bool { isRunning }
+@@ -136,14 +139,37 @@ final class LegacyCalculator {
+         latch = KeyLatch()
+     }
+~
+-    /// Turn the calculator off and keep its memory for the next launch (blocking, short).
++    /// Turn the calculator off and keep its memory for the next launch. The engine thread takes the
++    /// snapshot and writes the file; a background task keeps us alive until that is done, so the
++    /// screen never waits (the old synchronous read could hold it for three seconds on the way out).
+     func saveState() {
++        guard let e = engine, canKeepMemory else { return }
++        endSaveTask()                                   // the system can ask twice in a row
++        saveTask = UIApplication.shared.beginBackgroundTask(withName: "Keep the calculator's memory") {
++            [weak self] in self?.endSaveTask()
++        }
++        e.send(.perform { [weak self] machine in
++            let saved = try? machine.savedState(turnBackOn: false)
++            if let saved = saved { self?.stateStore.save(saved) }
++            DispatchQueue.main.async { self?.endSaveTask() }
++        })
++    }
++
++    /// The app is ending: nothing has to stay responsive, so the write must land before we return
++    /// (the system does not grant a background task time during termination).
++    func saveStateNow() {
+         guard let e = engine, canKeepMemory else { return }
+         if let saved = e.performAndWait(timeout: 3, { m in try? m.savedState(turnBackOn: false) }) {
+             if let s = saved { stateStore.save(s) }
+         }
+     }
+~
++    private func endSaveTask() {
++        guard let task = saveTask else { return }
++        saveTask = nil
++        UIApplication.shared.endBackgroundTask(task)
++    }
++
+     func resumeAfterBackground() {
+         guard let e = engine else { return }
+         e.send(.perform { m in _ = try? m.powerOn() })
